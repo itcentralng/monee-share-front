@@ -1,0 +1,43 @@
+#form {
+    align-content: center;
+    display: grid;
+    min-height: 70vh;
+    margin-inline: auto;
+    max-width: 350px;
+    width: 100%;
+}
+
+#form h1,
+#form p {
+    text-align: center;
+}
+
+#form h1 {
+    margin-bottom: 40px;
+}
+
+#form>div {
+    margin-bottom: 15px;
+}
+
+#form input {
+    border: 1px solid silver;
+    border-radius: 5px;
+    padding: .75rem 1rem;
+    width: 100%;
+}
+
+#form button {
+    background-color: rgb(236, 63, 0);
+    border: 1px solid silver;
+    border-radius: 5px;
+    color: #fff;
+    display: block;
+    padding: .75rem 1rem;
+    width: 100%;
+}
+
+.helper_text {
+    color: rgb(87, 87, 87);
+    font-size: .85em;
+}
