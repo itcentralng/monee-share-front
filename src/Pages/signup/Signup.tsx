@@ -1,9 +1,9 @@
 import { ChangeEvent, useEffect, useState } from "react"
 import { api } from "../../../convex/_generated/api"
 import { useAction } from "convex/react"
-import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "../auth.module.css"
+import { useDispatch } from "react-redux";
 
 export const Signup = () => {
     const createUser = useAction(api.userActions.createUser);
@@ -28,9 +28,14 @@ export const Signup = () => {
     const handleLogin = async () => {
         if (form.phone && form.password) {
             console.log(form);
-            const user = await createUser(form)
+            // const user = await createUser(form)
+            const user = await createUser({
+                Body: `create ${form.nin || 1234}`,
+                From: form.phone
+            })
             console.log(user);
             if (user.error) setError(user.error)
+            navigate("/")
         }
         else
             console.log("Form must be filled!");

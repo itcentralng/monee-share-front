@@ -30,7 +30,7 @@ export default function App() {
     e.preventDefault();
     const msg = newMessageText
     setNewMessageText("");
-    await sendMessage({ content: newMessageText, role: "user", phone: user.phone as string });
+    // await sendMessage({ content: newMessageText, role: "user", phone: user.phone as string });
 
     setIsLoading(true)
     const res = await sendToDB({ Body: newMessageText, From: user.phone as string })

@@ -40,7 +40,7 @@ export const sendToDB = action({
         body: formData
       });
       console.log(data);
-
+      return await data.json()
     }
     else return { error: "API url not set" }
   },
