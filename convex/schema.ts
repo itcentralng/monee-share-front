@@ -39,7 +39,7 @@ export default defineSchema(
       response: v.optional(v.string()),
     }),
     transactions: defineTable({
-      user: v.id("users"),
+      user: v.string(),
       status: v.string(),
       command: v.string(),
       type: v.string(),

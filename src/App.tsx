@@ -1,7 +1,6 @@
 import { useQuery, useMutation, useAction } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { FormEvent, useEffect, useState } from "react";
-import { faker } from "@faker-js/faker";
 import { useSelector } from "react-redux";
 import { UserOnClient } from "./types/user";
 import { Navigate } from "react-router-dom";
@@ -34,9 +33,9 @@ export default function App() {
     await sendMessage({ content: newMessageText, role: "user", phone: user.phone as string });
 
     setIsLoading(true)
-    sendToDB({ content: newMessageText, phone: user.phone as string }).then(() => {
-      setIsLoading(false)
-    });
+    const res = await sendToDB({ Body: newMessageText, From: user.phone as string })
+    console.log(res)
+    setIsLoading(false)
   }
 
   return (
@@ -44,7 +43,7 @@ export default function App() {
       <header>
         <h1>Monee Share</h1>
         <p>
-          Connected as <strong>{user.firstName}</strong>
+          Connected as <strong>{user.firstName?.replace("customer_", "")}</strong>
         </p>
       </header>
       {messages?.map((message: Message) => (

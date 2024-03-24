@@ -29,13 +29,18 @@ export const send = mutation({
 
 
 export const sendToDB = action({
-  args: { content: v.string(), phone: v.string() },
-  handler: async (ctx, { content, phone, }) => {
+  args: { Body: v.string(), From: v.string() },
+  handler: async (ctx, { Body, From, }) => {
     if (process.env.API_URL) {
+      const formData = new FormData();
+      formData.append('Body', Body);
+      formData.append('From', From);
       const data = await fetch(process.env.API_URL, {
         method: "POST",
-        body: JSON.stringify({ content, phone })
+        body: formData
       });
+      console.log(data);
+
     }
     else return { error: "API url not set" }
   },
