@@ -34,7 +34,7 @@ export const Signup = () => {
                 From: form.phone
             })
             console.log(user);
-            if (user.error) setError(user.error)
+            // if (user?.error) setError(user.?error)
             navigate("/")
         }
         else
