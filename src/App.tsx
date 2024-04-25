@@ -7,12 +7,13 @@ import { Navigate } from "react-router-dom";
 import { Message } from "./types/messages";
 import { Loader } from "./components/loader/Loader";
 
-
 export default function App() {
-  const { user } = useSelector((state: { auth: { user: UserOnClient } }) => state.auth)
-  if (!user) return <Navigate to="/signin" />
+  const { user } = useSelector(
+    (state: { auth: { user: UserOnClient } }) => state.auth
+  );
+  if (!user) return <Navigate to="/signin" />;
 
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const sendMessage = useMutation(api.messages.send);
   const sendToDB = useAction(api.messages.sendToDB);
   const messages = useQuery(api.messages.list, { userId: user?._id || "" });
@@ -20,7 +21,6 @@ export default function App() {
   const [newMessageText, setNewMessageText] = useState("");
 
   useEffect(() => {
-    console.log(messages)
     setTimeout(() => {
       window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     }, 0);
@@ -28,24 +28,40 @@ export default function App() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const msg = newMessageText
     setNewMessageText("");
-    // await sendMessage({ content: newMessageText, role: "user", phone: user.phone as string });
 
-    setIsLoading(true)
-    const res = await sendToDB({ Body: newMessageText, From: user.phone as string })
-    console.log(res)
-    setIsLoading(false)
-  }
+    setIsLoading(true);
+    const res = await sendToDB({
+      Body: newMessageText,
+      From: user.phone as string,
+    });
+    setIsLoading(false);
+    console.log(res);
+  };
 
   return (
     <main className="chat">
       <header>
         <h1>Monee Share</h1>
         <p>
-          Connected as <strong>{user.firstName?.replace("customer_", "")}</strong>
+          Connected as{" "}
+          <strong>{user.firstName?.replace("customer_", "")}</strong>
         </p>
       </header>
+      {isLoading ? (
+        <article
+          style={{
+            display: "block",
+            position: "fixed",
+            top: "70px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            zIndex: 999,
+          }}
+        >
+          <Loader />
+        </article>
+      ) : null}
       {messages?.map((message: Message) => (
         <article
           key={message._id}
@@ -55,15 +71,7 @@ export default function App() {
           <p>{message.content}</p>
         </article>
       ))}
-      {isLoading ?
-        <article key={"botholder"} style={{ display: "block" }}>
-          <div>bot</div>
-          <Loader />
-        </article>
-        : null}
-      <form
-        onSubmit={(e) => handleSubmit(e)}
-      >
+      <form onSubmit={(e) => handleSubmit(e)}>
         <input
           value={newMessageText}
           onChange={async (e) => {

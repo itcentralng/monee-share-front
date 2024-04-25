@@ -13,3 +13,14 @@ export const insert = mutation({
     await db.insert("transactions", transaction);
   },
 });
+
+
+export const getSingleByPhone = query({
+  handler: async ({ db }, { phone }: { phone: string }) => {
+    const response = await db.query("transactions").filter((q) => q.eq(q.field("user"), phone)).order("desc").first();
+    if (response?._id) {
+      return response
+    }
+    return { error: "No transactions found" }
+  },
+});

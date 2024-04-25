@@ -9,7 +9,7 @@ export const get = query({
 });
 
 
-export const getSingleByPhone = mutation({
+export const getSingleByPhone = query({
   handler: async ({ db }, { phone }: { phone: string }) => {
     const response = await db.query("users").filter((q) => q.eq(q.field("phone"), phone))
       .collect();
@@ -20,7 +20,8 @@ export const getSingleByPhone = mutation({
         phone: data.phone,
         account: data.account,
         firstName: data.firstName,
-        safehavenId: data.safehavenId
+        safehavenId: data.safehavenId,
+        pin: data.pin
       }
     }
     return { error: "No user found" }
@@ -38,7 +39,7 @@ export const loginUser = mutation({
         phone: data.phone,
         account: data.account,
         firstName: data.firstName,
-        safhavenId: data.safehavenId
+        safhavenId: data.safehavenId,
       }
     }
     return { error: "invalid credentials" }
