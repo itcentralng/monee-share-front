@@ -9,7 +9,6 @@ import styles from "../auth.module.css";
 
 export const Signin = () => {
   const getUser = useMutation(api.users.loginUser);
-  const [error, setError] = useState<string>("");
   const [form, setForm] = useState({
     phone: "",
     password: "",
@@ -25,21 +24,12 @@ export const Signin = () => {
   const handleLogin = async () => {
     if (form.phone && form.password && form.pin) {
       const user = await getUser(form);
-      if (user.error) setError(user.error);
-      else {
+      if (user) {
         dispatch(login(user as UserOnClient));
         navigate("/");
       }
     } else console.log("Form must be filled!");
   };
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setError("");
-    }, 4000);
-
-    return () => clearTimeout(timeout);
-  }, [error]);
 
   return (
     <section id={styles.form}>
