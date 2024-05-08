@@ -2,6 +2,7 @@ import { v } from "convex/values";
 import { action, mutation, query } from "./_generated/server";
 import { getSingleByPhone } from "./users";
 import { Id } from "./_generated/dataModel";
+import { UserOnConvex } from "../src/types/user";
 
 export const get = query({
   handler: async ({ db }) => {
@@ -23,7 +24,9 @@ export const list = query({
 export const send = mutation({
   args: { content: v.string(), role: v.string(), phone: v.string() },
   handler: async (ctx, { content, phone, role }) => {
-    const foundUser = await getSingleByPhone(ctx, { phone: phone });
+    const foundUser = (await getSingleByPhone(ctx, {
+      phone: phone,
+    })) as UserOnConvex;
     if (foundUser._id)
       return await ctx.db.insert("messages", {
         content,
@@ -35,12 +38,12 @@ export const send = mutation({
 });
 
 export const sendToDB = action({
-  args: { Body: v.string(), From: v.string() },
-  handler: async (ctx, { Body, From }) => {
+  args: { from: v.string(), text: v.string() },
+  handler: async (ctx, { from, text }) => {
     if (process.env.API_URL) {
       const formData = new FormData();
-      formData.append("Body", Body);
-      formData.append("From", From);
+      formData.append("from", from);
+      formData.append("text", text);
       const data = await fetch(process.env.API_URL, {
         method: "POST",
         body: formData,

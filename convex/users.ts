@@ -8,41 +8,34 @@ export const get = query({
   },
 });
 
-
 export const getSingleByPhone = query({
   handler: async ({ db }, { phone }: { phone: string }) => {
-    const response = await db.query("users").filter((q) => q.eq(q.field("phone"), phone))
-      .collect();
-    if (response.length) {
-      const data = response[0]
-      return {
-        _id: data._id,
-        phone: data.phone,
-        account: data.account,
-        firstName: data.firstName,
-        safehavenId: data.safehavenId,
-        pin: data.pin
-      }
+    const response = await db
+      .query("users")
+      .filter((q) => q.eq(q.field("phone"), phone))
+      .first();
+    if (response) {
+      return response;
     }
-    return { error: "No user found" }
+    return { error: "No user found" };
   },
 });
 
 export const loginUser = mutation({
-  handler: async ({ db }, { phone, password, pin }: { phone: string, password: string, pin: string }) => {
-    const response = await db.query("users").filter((q) => q.eq(q.field("phone"), phone)).filter((q) => q.eq(q.field("password"), password)).filter((q) => q.eq(q.field("pin"), pin))
-      .collect();
-    if (response.length) {
-      const data = response[0]
-      return {
-        _id: data._id,
-        phone: data.phone,
-        account: data.account,
-        firstName: data.firstName,
-        safhavenId: data.safehavenId,
-      }
+  handler: async (
+    { db },
+    { phone, password, pin }: { phone: string; password: string; pin: string }
+  ) => {
+    const response = await db
+      .query("users")
+      .filter((q) => q.eq(q.field("phone"), phone))
+      .filter((q) => q.eq(q.field("password"), password))
+      .filter((q) => q.eq(q.field("pin"), pin))
+      .first();
+    if (response) {
+      return response;
     }
-    return { error: "invalid credentials" }
+    return { error: "invalid credentials" };
   },
 });
 

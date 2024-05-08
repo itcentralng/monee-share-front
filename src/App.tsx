@@ -32,8 +32,8 @@ export default function App() {
 
     setIsLoading(true);
     const res = await sendToDB({
-      Body: newMessageText,
-      From: user.phone as string,
+      from: user.phone as string,
+      text: newMessageText,
     });
     setIsLoading(false);
     console.log(res);
